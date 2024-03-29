@@ -23,6 +23,7 @@ def test_duplicates(db_factory, example_data):
     metadatastore_db = db_factory()
     asset_registry_db = db_factory()
     serializer = Serializer(metadatastore_db, asset_registry_db)
+    
     for item in documents:
         serializer(*item)
     for item in documents:

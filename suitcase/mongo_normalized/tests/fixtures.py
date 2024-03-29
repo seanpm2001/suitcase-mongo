@@ -4,6 +4,8 @@
 import mongomock
 import pytest
 import uuid
+from suitcase.mongo_normalized import Serializer
+
 
 
 @pytest.fixture()
@@ -12,10 +14,12 @@ def db_factory(request):
         database_name = f'test-{str(uuid.uuid4())}'
         uri = 'mongodb://localhost:27017/'
         client = mongomock.MongoClient(uri)
-
         def drop():
             client.drop_database(database_name)
 
         request.addfinalizer(drop)
-        return client[database_name]
+        db = client[database_name]
+        serializer = Serializer(db, db)
+        serializer.create_indexes()
+        return db
     return inner
