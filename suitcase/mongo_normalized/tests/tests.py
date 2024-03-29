@@ -168,12 +168,21 @@ def test_index_creation(db_factory):
     assert indexes["resource_1"]
 
     indexes = metadatastore_db.run_start.index_information()
-    assert len(indexes.keys()) == 6
+    assert len(indexes.keys()) == 10
+    for index_name in [
+        '_id_',
+        'uid_1',
+        'scan_id_1',
+        'scan_id_-1__id_-1',
+        'time_1__id_-1',
+        'time_-1__id_-1',
+        'time_-1_scan_id_-1',
+        '$**_text',
+        'data_session_1',
+        'data_groups_1',
+    ]:
+        assert index_name in indexes
     assert indexes["uid_1"]["unique"]
-    assert indexes["time_-1_scan_id_-1"]
-    assert indexes["$**_text"]
-    assert indexes["data_session_1"]
-    assert indexes["data_groups_1"]
 
     indexes = metadatastore_db.run_stop.index_information()
     assert len(indexes.keys()) == 5
