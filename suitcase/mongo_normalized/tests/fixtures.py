@@ -22,6 +22,7 @@ def db_factory_no_indexes(request):
         return db
     return inner
 
+
 @pytest.fixture()
 def db_factory(request):
     def inner():
