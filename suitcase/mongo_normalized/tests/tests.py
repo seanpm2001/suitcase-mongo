@@ -23,6 +23,7 @@ def test_duplicates(db_factory, example_data):
     metadatastore_db = db_factory()
     asset_registry_db = db_factory()
     serializer = Serializer(metadatastore_db, asset_registry_db)
+
     for item in documents:
         serializer(*item)
     for item in documents:
@@ -204,12 +205,10 @@ def test_index_creation(db_factory):
     assert indexes["descriptor_-1_time_1"]
 
 
-def test_resource_uid_unique(db_factory):
-    db = db_factory()
-    print(type(db))
-    metadatastore_db = db_factory()
-    asset_registry_db = db_factory()
-    Serializer(metadatastore_db, asset_registry_db, resource_uid_unique=True)
+def test_resource_uid_unique(db_factory_no_indexes):
+    metadatastore_db = db_factory_no_indexes()
+    asset_registry_db = db_factory_no_indexes()
+    Serializer(metadatastore_db, asset_registry_db, resource_uid_unique=True).create_indexes()
 
     indexes = asset_registry_db.resource.index_information()
     assert indexes["uid_1"].get("unique")
